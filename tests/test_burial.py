@@ -15,6 +15,10 @@ class BurialTests(unittest.TestCase):
         from app.collectors.validation import validate_earthquake
         from app.collectors.normalization import normalize_earthquake
         e=self.event(); self.assertEqual(validate_earthquake(e), []); n=normalize_earthquake(e); self.assertEqual(n.source,"usgs"); self.assertEqual(n.location,"Test place")
+    def test_malformed_numeric_input_is_rejected(self):
+        from app.collectors.validation import validate_earthquake
+        errors=validate_earthquake(self.event(magnitude="not-a-number", latitude="bad"))
+        self.assertIn("missing or non-finite magnitude", errors); self.assertIn("latitude outside valid range", errors)
     def test_atomic_deduplication(self):
         from app.database.events import save_event
         e=self.event(); self.assertIsNotNone(save_event(e)); self.assertIsNone(save_event(e))
