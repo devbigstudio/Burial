@@ -1,0 +1,12 @@
+services:
+  burial:
+    build: .
+    container_name: burial
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_PATH: /burial/data/burial.db
+    volumes:
+      - ./data:/burial/data
+      - ./logs:/burial/logs
